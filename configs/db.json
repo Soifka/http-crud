@@ -1,0 +1,11 @@
+{
+    "development": {
+        "host": "fe_crud",
+        "port": 5432,
+        "user": "postgres",
+        "password": "postgres",
+        "database": "fe_crud"
+    },
+    "test": {},
+    "production": {}
+}
