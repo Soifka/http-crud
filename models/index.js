@@ -22,7 +22,7 @@ fs.readdirSync(__dirname)
 .forEach(fName => {
     const absPathToFile = path.resolve(__dirname, fName);
     const Model = require(absPathToFile);
-    Model.client = client;
+    Model._client = client;
     db[Model.name] = Model;
 })
 

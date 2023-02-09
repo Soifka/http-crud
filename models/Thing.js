@@ -10,7 +10,7 @@ class Thing {
     static async create(insertValues) {
         const insertAttr = Object.entries(this._attributes)
         .filter(([attr, domain]) => attr in insertValues)
-        .map((attr) => attr);
+        .map(([attr]) => attr);
 
         const insertSchemaStr = insertAttr.map(attr => `"${attr}"`).join(',');
 
@@ -27,22 +27,35 @@ class Thing {
 
     static async findByPk(pk) {
         const { rows } = await this._client.query(`SELECT * FROM ${this._tableName} WHERE id = ${pk};`);
-        return rows;                           
+        return rows;
+        
+        //throw new TypeError('Type Error');
     }
 
     static async findAll() {
         const { rows } = await this._client.query(`SELECT * FROM ${this._tableName};`);
         return rows;
+
+        //throw new RangeError('Range Error');
     }
 
-    static async updateByPk(updateObj) {
-        const { id, body } = updateObj;
-        const { rows } = await this._client.query(`UPDATE ${this._tableName} SET body = ${body} WHERE id = ${id};`);
+    static async updateByPk({id, updateValues}) {
+        const updateAttr = Object.entries(this._attributes)
+        .filter(([attr, domain]) => attr in updateValues)
+        .map(([attr]) => attr);
+        
+        const updateValuesStr = updateAttr.map (attr => {
+            const value = updateValues[attr]
+            return typeof value === 'string' ? `${attr} = '${value}'`: `${attr} = ${value}`;
+        }).join(' ');
+
+        const { rows } = await this._client.query(`UPDATE ${this._tableName} SET ${updateValuesStr} WHERE id = ${id} RETURNING *;`);
+        
         return rows;
     }
 
     static async deleteByPk(pk) {
-        const { rows } = await this._client.query(`DELETE FROM ${this._tableName} WHERE id = ${pk};`);
+        const { rows } = await this._client.query(`DELETE FROM ${this._tableName} WHERE id = ${pk} RETURNING *;`);
         return rows;
     }
 };

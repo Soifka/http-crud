@@ -1,0 +1,3 @@
+class DataBaseError extends Error {
+
+}
