@@ -1,9 +1,13 @@
+const { ValidationError } = require('yup');
+const DataBaseError = require('./errors/DataBaseError');
+
 module.exports.basicErrorHandler = (err, req, res, next) => {
-    if(err instanceof TypeError) {
-        return res.status(400).send('Thing does not exist');
+    if(err instanceof DataBaseError) {
+        return res.status(400).send('Something wrong with database');
     }
 
-    if(err instanceof RangeError) {
-        return res.status(401).send('There is more than one thing');
+    if(err instanceof ValidationError) {
+        return res.status(400).send('Invalid data');
     }
+    next();
 }

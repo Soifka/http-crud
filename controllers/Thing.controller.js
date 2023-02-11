@@ -1,6 +1,8 @@
 const { Thing } = require('../models/index');
 
-module.exports.createThing = async(req, res, next) => {
+module.exports.createThing = async (req, res, next) => {
+    console.log('123')
+    
     const { body } = req;
 
     try {

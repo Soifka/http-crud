@@ -1,3 +1,5 @@
+const DataBaseError = require('../errors/DataBaseError');
+
 class Thing {
     static _tableName = 'things';
     static _client = null;
@@ -29,7 +31,7 @@ class Thing {
         const { rows } = await this._client.query(`SELECT * FROM ${this._tableName} WHERE id = ${pk};`);
         return rows;
         
-        //throw new TypeError('Type Error');
+        //throw new DataBaseError();
     }
 
     static async findAll() {
